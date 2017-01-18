@@ -1,0 +1,35 @@
+<html><!DOCTYPE html>
+    <head>
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+
+    </head>
+    <body>
+<div class="container">
+    <h1 class="header">URL Shortener Microservice</h1>
+    <blockquote>User Stories:
+        <ol>
+            <li>I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.</li>
+            <li>If I pass an invalid URL that doesn't follow the valid http://www.example.com format, the JSON response
+                will contain an error instead.
+            </li>
+            <li>When I visit that shortened URL, it will redirect me to my original link.</li>
+        </ol>
+    </blockquote>
+   <br>
+    <h2>Short URL</h2>
+    <div class="row">
+        <div class="input-field col s12">
+            <input id="url" type="text" class="validate">
+            <label for="url">URL</label>
+        </div>
+     </div>
+     <div>
+         <button id="url-btn" class="btn btn-primary">Short URL</button>
+    </div>
+
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    </body>
+</html>
