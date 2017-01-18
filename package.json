@@ -18,6 +18,7 @@
   "homepage": "https://github.com/neighbor983/URL-Shortener-Microservice#readme",
   "dependencies": {
     "express": "^4.14.0",
-    "mongodb": "^2.2.21"
+    "mongodb": "^2.2.21",
+    "validator": "^6.2.1"
   }
 }
