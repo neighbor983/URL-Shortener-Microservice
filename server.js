@@ -8,7 +8,7 @@ var db = require('./db.js');
 var urlList = require('./schema.js');
 var port = process.env.PORT || 3500;
 var mongoURL = process.env.MONGOLAB_URI || "mongodb://localhost:27017/urls";
-var controller = require('./controller.js');
+var siteUrl = "https://vast-stream-33440.herokuapp.com/"
 
 db.connect(mongoURL, function(err) {
   if (err) {
@@ -22,11 +22,7 @@ app.listen(port, function(){
   console.log("Listening on port: " + port);
 });
 
-app.get('/', function(req,res){
-    controller.getHome(req,res);
-});
 
-/*
 app.get('/', function(req, res) {
   var fileName = path.join(__dirname, 'index.html');
   res.sendFile(fileName, function (err) {
@@ -39,7 +35,7 @@ app.get('/', function(req, res) {
     }
   });
 });
-*/
+
 app.get('/:id', function(req, res) {
   var id = parseInt(req.params.id,10);
   if(Number.isNaN(id)) {
@@ -68,7 +64,7 @@ app.get('/new/*?', function(req,res) {
       if(docs && docs.length) {
         res.status(201).json({
           "original_url": theUrl,
-          "short_url": "https://url-shortner-microservice-neighbor983.c9users.io/" + docs[0].id
+          "short_url": siteUrl + docs[0].id
         });
       }
     });
@@ -80,7 +76,7 @@ app.get('/new/*?', function(req,res) {
       }
       return res.status(201).json({
         "original_url": theUrl,
-        "short_url": "https://url-shortner-microservice-neighbor983.c9users.io/" + myUrl.id
+        "short_url": siteurl + myUrl.id
       });
     });
   } else {
