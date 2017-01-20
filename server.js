@@ -1,56 +1,90 @@
 'use strict';
 
 var express = require('express');
-var path = require('path');
-var mongodb = require('mongodb').MongoClient;
-var validator = require('validator');
-
-
-var mongoURL = process.env.MONGOLAB_URI;
-var port = process.env.PORT || 8080;
-
 var app = express();
+var fs = require('fs');
+var path = require('path');
+var db = require('./db.js');
+var urlList = require('./schema.js');
+var port = process.env.PORT || 3500;
+var mongoURL = process.env.MONGOLAB_URI || "mongodb://localhost:27017/urls";
 
-
-mongodb.connect(mongoURL, function (err, db) {
+db.connect(mongoURL, function(err) {
   if (err) {
-    console.log('Unable to connect to the mongoDB server. Error:', err);
+    console.log('Unable to connect to Mongo.');
+    process.exit(1);
+  } 
+});
+
+
+app.listen(port, function(){
+  console.log("Listening on port: " + port);
+});
+
+app.get('/', function(req, res) {
+  var fileName = path.join(__dirname, 'index.html');
+  res.sendFile(fileName, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      console.log('Sent:', fileName);
+    }
+  });
+});
+
+app.get('/:id', function(req, res) {
+  var id = parseInt(req.params.id,10);
+  if(Number.isNaN(id)) {
+    res.status(404).send("Invalid Short URL");
   } else {
-    console.log('Connection established to', mongoURL);
+       
+    urlList.find({id: id}, function (err, docs) {
+      if (err) res.status(404).send(err);
+      if (docs && docs.length) {
+        res.redirect(docs[0].url);
+      } else {
+        res.status(404).send("Invalid Short URL");
+      }
+    });
 
-    // do some work here with the database.
-
-    //Close connection
-    db.close();
   }
 });
 
 
-app.get('/', function(req,res){
-    res.sendFile(path.join(__dirname + '/index.html'));
-});
-
 app.get('/new/*?', function(req,res) {
-    var url = req.params[0];
-    var isValidUrl = validator.isUrl(url);
-    
-    var urls = {};
-    
-    if(!isValidUrl){
-        urls = {
-            "error": "This is an invalid url url, make sure you have entered the url correctly."
-        };
-    } else {
-        urls = {
-            "long_url" : url,
-            "short_url": ""
-        };
-    }
-    
-    res.send(urls);
-});
+  var validUrl = require('valid-url');
+  var theUrl = req.params[0];
+
+  if(theUrl && validUrl.isUri(theUrl)) {
+    urlList.find({url: theUrl}, function (err, docs) {
+      if(docs && docs.length) {
+        res.status(201).json({
+          "original_url": theUrl,
+          "short_url": "https://url-shortner-microservice-neighbor983.c9users.io/" + docs[0].id
+        });
+      }
+    });
 
 
-app.listen(port,function(){
-   console.log("app is listening on port: "+ port); 
+    urlList.create({url: theUrl}, function (err, myUrl) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.status(201).json({
+        "original_url": theUrl,
+        "short_url": "https://url-shortner-microservice-neighbor983.c9users.io/" + myUrl.id
+      });
+    });
+  } else {
+    res.status(400).json({
+      error: "URL Invalid"
+    });
+  }
+
 });
+
+function handleError(res, err) {
+  return res.status(500).send(err);
+}

@@ -18,15 +18,23 @@
     </blockquote>
    <br>
     <h2>Short URL</h2>
-    <div class="row">
-        <div class="input-field col s12">
-            <input id="url" type="text" class="validate">
-            <label for="url">URL</label>
+    <form class="form">
+        <div class="form-group">
+            <input class="form-control" type="text" id="url" name="url" placeholder="http://example.com">
         </div>
-     </div>
-     <div>
-         <button id="url-btn" class="btn btn-primary">Short URL</button>
-    </div>
+        <div class="form-group">
+            <button id="url-btn" class="btn btn-primary">Get Short URL</button>
+        </div>
+    </form>
+</div>
+<script>
+    var btn = document.getElementById("url-btn");
+    btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        var url = document.getElementById("url").value;
+        window.location = '/new/' + url;
+    });
+</script>
 
 
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
