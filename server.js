@@ -76,7 +76,7 @@ app.get('/new/*?', function(req,res) {
       }
       return res.status(201).json({
         "original_url": theUrl,
-        "short_url": siteurl + myUrl.id
+        "short_url": siteUrl + myUrl.id
       });
     });
   } else {
