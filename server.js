@@ -8,6 +8,7 @@ var db = require('./db.js');
 var urlList = require('./schema.js');
 var port = process.env.PORT || 3500;
 var mongoURL = process.env.MONGODB_URI || "mongodb://localhost:27017/urls";
+
 var siteUrl = "https://vast-stream-33440.herokuapp.com/"
 
 db.connect(mongoURL, function(err) {

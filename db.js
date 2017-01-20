@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var mongoURL = process.env.MONGOLAB_URI || "mongodb://localhost:27017/urls";
+var mongoURL = process.env.MONGODB_URI || "mongodb://localhost:27017/urls";
 
 var state = {
   db: null,
