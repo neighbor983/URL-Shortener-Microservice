@@ -8,6 +8,7 @@ var db = require('./db.js');
 var urlList = require('./schema.js');
 var port = process.env.PORT || 3500;
 var mongoURL = process.env.MONGOLAB_URI || "mongodb://localhost:27017/urls";
+var controller = require('./controller.js');
 
 db.connect(mongoURL, function(err) {
   if (err) {
@@ -21,6 +22,11 @@ app.listen(port, function(){
   console.log("Listening on port: " + port);
 });
 
+app.get('/', function(req,res){
+    controller.getHome(req,res);
+});
+
+/*
 app.get('/', function(req, res) {
   var fileName = path.join(__dirname, 'index.html');
   res.sendFile(fileName, function (err) {
@@ -33,7 +39,7 @@ app.get('/', function(req, res) {
     }
   });
 });
-
+*/
 app.get('/:id', function(req, res) {
   var id = parseInt(req.params.id,10);
   if(Number.isNaN(id)) {
